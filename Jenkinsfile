@@ -1,11 +1,6 @@
 pipeline {
     agent any
 	
-	environment {
-        DOCKER_IMAGE = 'alpine:3.3'
-        // DOCKER_IMAGE = 'alpine:latest'
-    }
-
     stages {
         stage('Upload to AWS') {
             steps {
