@@ -1,5 +1,10 @@
 pipeline {
     agent any
+	
+	environment {
+        DOCKER_IMAGE = 'alpine:3.3'
+        // DOCKER_IMAGE = 'alpine:latest'
+    }
 
     stages {
         stage('Upload to AWS') {
@@ -23,6 +28,11 @@ pipeline {
 					sh 'echo "Uploading content with AWS credentials"'
 					s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'iftaa-jenkins-bucket')
 				}
+            }
+        }
+		stage('Microscanner') {
+            steps {
+				aquaMicroscanner imageName: "$DOCKER_IMAGE", notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
             }
         }
     }
